@@ -15,7 +15,7 @@ def get_requirements(path: str) -> List[str]:
 
 
 setup(
-    name="mlproject",
+    name="Student_Performance_Indicator",
     version="0.0.1",
     author="Sarvadnya",
     author_email="your-email@example.com",
