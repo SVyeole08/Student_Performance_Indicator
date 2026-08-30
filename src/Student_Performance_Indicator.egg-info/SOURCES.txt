@@ -1,7 +1,0 @@
-README.md
-setup.py
-src/Student_Performance_Indicator.egg-info/PKG-INFO
-src/Student_Performance_Indicator.egg-info/SOURCES.txt
-src/Student_Performance_Indicator.egg-info/dependency_links.txt
-src/Student_Performance_Indicator.egg-info/requires.txt
-src/Student_Performance_Indicator.egg-info/top_level.txt
