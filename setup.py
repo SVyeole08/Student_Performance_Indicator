@@ -18,7 +18,7 @@ setup(
     name="Student_Performance_Indicator",
     version="0.0.1",
     author="Sarvadnya",
-    author_email="your-email@example.com",
+    author_email="yeolesv1012@gmail.com",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     install_requires=get_requirements("requirements.txt"),

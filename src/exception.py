@@ -1,4 +1,6 @@
 import sys
+import logging
+import logger  # Ensure project logger config runs once
 
 
 def error_message_detail(error, error_detail: sys):
@@ -19,3 +21,11 @@ class CustomException(Exception):
 
     def __str__(self):
         return self.error_message
+
+
+if __name__ == "__main__":
+    try:
+        a = 1 / 0
+    except Exception as e:
+        logger.logging.info("Divide by Zero")
+        raise CustomException(e, sys)
