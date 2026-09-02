@@ -6,4 +6,5 @@ scikit-learn
 Flask
 catboost
 xgboost
+dill
 -e .
