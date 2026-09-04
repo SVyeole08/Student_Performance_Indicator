@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from src.exception import CustomException
 from src.logger import logging
 from src.components import data_transformation
+from src.components import model_trainer
 
 
 @dataclass
@@ -50,4 +51,7 @@ if __name__ == "__main__":
     train_data, test_data = obj.init_data_ingestion()
 
     data_transform = data_transformation.DataTransformation()
-    data_transform.init_data_transformation(train_data, test_data)
+    train_arr, test_arr, _ = data_transform.init_data_transformation(train_data, test_data)
+
+    model_train = model_trainer.ModelTrainer()
+    print(model_train.init_model_training(train_arr=train_arr, test_arr=test_arr))
