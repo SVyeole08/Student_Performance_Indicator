@@ -134,6 +134,7 @@ class ModelTrainer:
             score_r2 = r2_score(y_test, prediction)
 
             return score_r2
+            logging.info("Printed best score.")
 
         except Exception as e:
             raise CustomException(e, sys)

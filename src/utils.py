@@ -45,3 +45,11 @@ def evaluate_model(X_train, X_test, y_train, y_test, models, params, cv):
 
     except Exception as e:
         raise CustomException(e, sys)
+
+
+def load_obj(file_path):
+    try:
+        with open(file_path, 'rb') as fo:
+            return dill.load(fo)
+    except Exception as e:
+        raise CustomException(e, sys)
