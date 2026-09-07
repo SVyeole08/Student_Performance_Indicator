@@ -8,7 +8,6 @@ __pycache__/
 
 .idea/
 catboost_info/
-artifact/
 
 # Distribution / packaging
 .Python
