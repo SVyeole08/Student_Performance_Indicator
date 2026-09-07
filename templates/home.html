@@ -1,115 +1,2003 @@
-<html>
-    <head>
-        <title>
-        </title>
-    </head>
-    <body>
-    <div class="login">
-        <h1>Student Exam Performance Indicator</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <form action="{{ url_for('predict')}}" method="post">
-            <h1>
-                <legend>Student Exam Performance Prediction</legend>
-            </h1>
-            <div class="mb-3">
-                <label class="form-label">Gender</label>
-                <select class="form-control" name="gender" placeholder="Enter you Gender" required>
-                    <option class="placeholder" selected disabled value="">Select your Gender</option>
-                    <option value="male">
-                        Male
-                    </option>
-                    <option value="female">
-                        Female
-                    </option>
-                </select>
+    <title>Predict Performance | Student Performance</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #070b18;
+            --panel: rgba(15, 21, 39, 0.76);
+            --panel-strong: rgba(18, 25, 46, 0.94);
+            --line: rgba(255, 255, 255, 0.08);
+            --line-hover: rgba(255, 255, 255, 0.15);
+
+            --text: #f4f7ff;
+            --muted: #929bb4;
+            --muted-strong: #b9c1d4;
+
+            --cyan: #54e8ff;
+            --violet: #9b7cff;
+            --pink: #ff6bd6;
+            --green: #69f0ae;
+            --danger: #ff7187;
+
+            --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Smooth Page Transitions */
+        body {
+            opacity: 0;
+            animation: fadeInPage 0.5s ease-out forwards;
+        }
+
+        body.fade-out {
+            animation: fadeOutPage 0.3s ease-in forwards;
+        }
+
+        @keyframes fadeInPage {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutPage {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text);
+            background: radial-gradient(circle at 15% 10%, rgba(84, 232, 255, 0.08), transparent 30%),
+            radial-gradient(circle at 85% 20%, rgba(155, 124, 255, 0.09), transparent 32%),
+            radial-gradient(circle at 50% 100%, rgba(255, 107, 214, 0.05), transparent 30%),
+            var(--bg);
+            font-family: "DM Sans", sans-serif;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.28;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: linear-gradient(to bottom, black, transparent 80%);
+        }
+
+        /* Ambient background */
+
+        .ambient {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.18;
+            animation: float 12s ease-in-out infinite;
+        }
+
+        .orb-one {
+            width: 280px;
+            height: 280px;
+            top: 8%;
+            left: -100px;
+            background: var(--cyan);
+        }
+
+        .orb-two {
+            width: 340px;
+            height: 340px;
+            top: 38%;
+            right: -130px;
+            background: var(--violet);
+            animation-delay: -4s;
+        }
+
+        .orb-three {
+            width: 240px;
+            height: 240px;
+            bottom: -80px;
+            left: 38%;
+            background: var(--pink);
+            animation-delay: -8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate3d(0, -25px, 0) scale(1.06);
+            }
+        }
+
+        /* Main container */
+
+        .page {
+            width: min(1180px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 26px 0 60px;
+        }
+
+        /* Topbar */
+
+        .topbar {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 70px;
+            padding: 12px 24px;
+
+            background: rgba(15, 21, 39, 0.76);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+            transition: border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .topbar:hover {
+            border-color: var(--line-hover);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35),
+            0 0 0 1px rgba(84, 232, 255, 0.025);
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+
+            color: var(--text);
+            text-decoration: none;
+
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            transition: transform 0.25s ease;
+        }
+
+        .brand:hover {
+            transform: translateX(2px);
+        }
+
+        .brand:link,
+        .brand:visited,
+        .brand:active,
+        .brand:focus {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
+
+            background: linear-gradient(
+                    135deg,
+                    var(--cyan),
+                    var(--violet)
+            );
+
+            color: #07101d !important;
+
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+
+            box-shadow: 0 8px 25px rgba(84, 232, 255, 0.16),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 9px 14px;
+
+            border: 1px solid var(--line);
+            border-radius: 999px;
+
+            color: var(--muted);
+            text-decoration: none;
+
+            font-size: 13px;
+            transition: 0.25s ease;
+        }
+
+        .back:link,
+        .back:visited,
+        .back:hover,
+        .back:active {
+            text-decoration: none;
+        }
+
+        .back:hover {
+            color: var(--text);
+            border-color: var(--line-hover);
+            background: rgba(255, 255, 255, 0.035);
+            transform: translateX(-2px);
+        }
+
+        /* Heading */
+
+        .heading {
+            max-width: 760px;
+            margin-bottom: 38px;
+        }
+
+        .heading h1 {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(42px, 6vw, 72px);
+            line-height: 0.98;
+            letter-spacing: -0.055em;
+            font-weight: 600;
+        }
+
+        .heading h1 span {
+            background: linear-gradient(
+                    100deg,
+                    var(--cyan),
+                    #8ecbff 35%,
+                    var(--violet) 70%,
+                    var(--pink)
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .heading p {
+            margin-top: 20px;
+            max-width: 650px;
+
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.75;
+        }
+
+        /* Main layout */
+
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.75fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        /* Cards */
+
+        .card {
+            position: relative;
+
+            padding: 30px;
+
+            background: linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.045),
+                    rgba(255, 255, 255, 0.015)
+            ),
+            var(--panel);
+
+            border: 1px solid var(--line);
+            border-radius: 26px;
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
+            transition: transform 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease;
+        }
+
+        .card:hover {
+            border-color: var(--line-hover);
+            box-shadow: 0 35px 90px rgba(0, 0, 0, 0.42),
+            0 0 0 1px rgba(84, 232, 255, 0.025);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+
+            margin-bottom: 28px;
+        }
+
+        .card-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 8px;
+
+            border-radius: 50%;
+
+            background: rgba(105, 240, 174, 0.07);
+            border: 1px solid rgba(105, 240, 174, 0.12);
+
+            color: var(--green);
+
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 12px rgba(105, 240, 174, 0.8);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.45;
+                transform: scale(0.75);
+            }
+        }
+
+        /* Form */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .field {
+            min-width: 0;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: var(--muted-strong);
+
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: 17px;
+            height: 17px;
+
+            display: grid;
+            place-items: center;
+
+            color: #7e8ba8;
+
+            pointer-events: none;
+
+            font-size: 13px;
+            line-height: 1;
+            z-index: 2;
+
+            transition: color 0.25s ease, filter 0.25s ease;
+        }
+
+        /* Turn icon green when a valid selection/input is made */
+        .input-wrap:has(.custom-select.has-value) .input-icon,
+        .input-wrap:has(input:valid) .input-icon {
+            color: var(--green);
+            filter: drop-shadow(0 0 6px rgba(105, 240, 174, 0.4));
+        }
+
+        /* SVG check icon */
+
+        .input-icon.icon-svg svg {
+            width: 16px;
+            height: 16px;
+            display: block;
+        }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+            height: 52px;
+
+            padding: 0 42px 0 43px;
+
+            border: 1px solid var(--line);
+            border-radius: 14px;
+
+            outline: none;
+
+            background: rgba(5, 9, 21, 0.55);
+            color: var(--text);
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+
+            transition: border-color 0.25s ease,
+            background 0.25s ease,
+            box-shadow 0.25s ease,
+            transform 0.25s ease;
+
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #10162a;
+            color: var(--text);
+        }
+
+        select:focus,
+        input[type="number"]:focus {
+            border-color: rgba(84, 232, 255, 0.42);
+
+            background: rgba(8, 14, 29, 0.8);
+
+            box-shadow: 0 0 0 4px rgba(84, 232, 255, 0.07),
+            0 0 30px rgba(84, 232, 255, 0.035);
+
+            transform: translateY(-1px);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-52%);
+
+            color: #7e8ba8;
+
+            font-size: 17px;
+            line-height: 1;
+
+            pointer-events: none;
+        }
+
+        /* Custom select dropdown */
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select > select {
+            display: none;
+        }
+
+        .custom-select-trigger {
+            width: 100%;
+            height: 52px;
+            padding: 0 42px 0 43px;
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            outline: none;
+            background: rgba(5, 9, 21, 0.55);
+            color: var(--muted);
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.25s ease,
+            background 0.25s ease,
+            box-shadow 0.25s ease,
+            transform 0.25s ease;
+        }
+
+        .custom-select.has-value .custom-select-trigger {
+            color: var(--text);
+        }
+
+        .custom-select.open .custom-select-trigger,
+        .custom-select-trigger:focus-visible {
+            border-color: rgba(84, 232, 255, 0.42);
+            background: rgba(8, 14, 29, 0.8);
+            box-shadow: 0 0 0 4px rgba(84, 232, 255, 0.07),
+            0 0 30px rgba(84, 232, 255, 0.035);
+        }
+
+        .custom-select-menu {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 8px);
+            z-index: 20;
+            padding: 7px;
+            border: 1px solid var(--line-hover);
+            border-radius: 14px;
+            background: rgba(16, 22, 42, 0.98);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-6px) scale(0.985);
+            transform-origin: top;
+            transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+        }
+
+        .custom-select.open .custom-select-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .custom-select-option {
+            padding: 10px 12px;
+            border-radius: 9px;
+            color: var(--muted-strong);
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom-select-option:hover,
+        .custom-select-option.selected {
+            background: rgba(84, 232, 255, 0.08);
+            color: var(--text);
+        }
+
+        .custom-select-option.selected::after {
+            content: "✓";
+            color: var(--cyan);
+            font-weight: bold;
+        }
+
+        .custom-select.open + .select-arrow {
+            transform: translateY(-52%) rotate(180deg);
+        }
+
+        .field.invalid .custom-select-trigger {
+            border-color: rgba(255, 113, 135, 0.55);
+            box-shadow: 0 0 0 4px rgba(255, 113, 135, 0.055);
+        }
+
+        /* Custom validation */
+
+        .validation-message {
+            display: block;
+
+            min-height: 0;
+            margin-top: 0;
+
+            color: var(--danger);
+
+            font-size: 11px;
+            line-height: 1.4;
+
+            opacity: 0;
+            transform: translateY(-3px);
+
+            transition: opacity 0.2s ease,
+            transform 0.2s ease,
+            margin-top 0.2s ease;
+        }
+
+        .field.invalid .validation-message {
+            min-height: 16px;
+            margin-top: 7px;
+
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .field.invalid select,
+        .field.invalid input[type="number"] {
+            border-color: rgba(255, 113, 135, 0.55);
+
+            box-shadow: 0 0 0 4px rgba(255, 113, 135, 0.055);
+        }
+
+        .field.invalid .input-icon {
+            color: var(--danger);
+        }
+
+        /* Submit */
+
+        .form-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+
+            margin-top: 28px;
+            padding-top: 22px;
+
+            border-top: 1px solid var(--line);
+        }
+
+        .form-note {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .predict-button {
+            position: relative;
+
+            min-width: 180px;
+            height: 52px;
+
+            padding: 0 22px;
+
+            border: 0;
+            border-radius: 14px;
+
+            cursor: pointer;
+
+            color: #06101c;
+
+            background: linear-gradient(
+                    110deg,
+                    var(--cyan),
+                    #8fd8ff 45%,
+                    var(--violet)
+            );
+
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+
+            box-shadow: 0 12px 30px rgba(84, 232, 255, 0.13),
+            inset 0 1px 0 rgba(255, 255, 255, 0.45);
+
+            overflow: hidden;
+
+            transition: transform 0.25s ease,
+            box-shadow 0.25s ease,
+            filter 0.25s ease;
+        }
+
+        .predict-button::before {
+            content: "";
+
+            position: absolute;
+            top: 0;
+            left: -120%;
+
+            width: 80%;
+            height: 100%;
+
+            background: linear-gradient(
+                    100deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.35),
+                    transparent
+            );
+
+            transform: skewX(-20deg);
+
+            transition: left 0.6s ease;
+        }
+
+        .predict-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow: 0 17px 38px rgba(84, 232, 255, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5);
+
+            filter: brightness(1.05);
+        }
+
+        .predict-button:hover::before {
+            left: 140%;
+        }
+
+        .predict-button:active {
+            transform: translateY(0);
+        }
+
+        .predict-button.loading {
+            pointer-events: none;
+            filter: brightness(0.9);
+        }
+
+        .predict-button.loading .button-text {
+            opacity: 0;
+        }
+
+        .predict-button.loading::after {
+            content: "";
+
+            position: absolute;
+
+            width: 17px;
+            height: 17px;
+
+            border: 2px solid rgba(6, 16, 28, 0.25);
+            border-top-color: #06101c;
+
+            border-radius: 50%;
+
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Validation shake */
+
+        .card.shake {
+            animation: shake 0.35s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-5px);
+            }
+
+            40% {
+                transform: translateX(5px);
+            }
+
+            60% {
+                transform: translateX(-4px);
+            }
+
+            80% {
+                transform: translateX(4px);
+            }
+        }
+
+        /* Sidebar */
+
+        .side-column {
+            display: grid;
+            gap: 22px;
+        }
+
+        .info-card {
+            padding: 25px;
+
+            border: 1px solid var(--line);
+            border-radius: 24px;
+
+            background: rgba(15, 21, 39, 0.6);
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .info-label {
+            margin-bottom: 15px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 19px;
+            line-height: 1.25;
+        }
+
+        .info-card p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* Pipeline */
+
+        .pipeline {
+            margin-top: 24px;
+
+            display: grid;
+            gap: 13px;
+        }
+
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        .step-number {
+            width: 27px;
+            height: 27px;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border: 1px solid var(--line);
+            border-radius: 9px;
+
+            background: rgba(255, 255, 255, 0.025);
+
+            color: var(--muted-strong);
+
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .pipeline-step.active {
+            color: var(--text);
+        }
+
+        .pipeline-step.active .step-number {
+            border-color: rgba(84, 232, 255, 0.22);
+
+            color: var(--cyan);
+
+            background: rgba(84, 232, 255, 0.07);
+
+            box-shadow: 0 0 20px rgba(84, 232, 255, 0.06);
+        }
+
+        /* Result */
+
+        .result {
+            margin-top: 22px;
+
+            padding: 27px;
+
+            border: 1px solid rgba(105, 240, 174, 0.16);
+            border-radius: 24px;
+
+            background: radial-gradient(
+                    circle at 10% 10%,
+                    rgba(105, 240, 174, 0.08),
+                    transparent 40%
+            ),
+            rgba(10, 25, 28, 0.65);
+
+            animation: resultIn 0.65s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        @keyframes resultIn {
+            0% {
+                opacity: 0;
+                transform: translateY(14px);
+                box-shadow: 0 0 0 rgba(105, 240, 174, 0);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(105, 240, 174, 0.25);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                box-shadow: 0 0 0 rgba(105, 240, 174, 0);
+            }
+        }
+
+        .result-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .result-label {
+            color: var(--green);
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .result-description {
+            margin-top: 7px;
+
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .result-score {
+            margin-top: 15px;
+
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(48px, 7vw, 72px);
+            line-height: 1;
+            letter-spacing: -0.06em;
+
+            color: var(--text);
+        }
+
+        .result-score small {
+            color: var(--muted);
+            font-size: 16px;
+            letter-spacing: 0;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 900px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .side-column {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page {
+                width: min(100% - 24px, 1180px);
+                padding-top: 18px;
+            }
+
+            .topbar {
+                margin-bottom: 48px;
+            }
+
+            .heading {
+                margin-bottom: 28px;
+            }
+
+            .heading h1 {
+                font-size: clamp(40px, 13vw, 58px);
+            }
+
+            .card {
+                padding: 21px;
+                border-radius: 21px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 17px;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .form-footer {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .predict-button {
+                width: 100%;
+            }
+
+            .side-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .brand {
+                font-size: 14px;
+            }
+
+            .brand-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .back {
+                padding: 8px 11px;
+            }
+
+            .card-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .status {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="ambient">
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="orb orb-three"></div>
+</div>
+
+<main class="page">
+
+    <!-- Top Navigation -->
+
+    <header class="topbar">
+
+        <a href="{{ url_for('index') }}" class="brand">
+            <span class="brand-icon">
+                <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                >
+                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                    <polyline points="16 7 22 7 22 13"></polyline>
+                </svg>
+            </span>
+            <span>Student Performance</span>
+        </a>
+
+        <a href="{{ url_for('index') }}" class="back">
+            <span>←</span>
+            Back
+        </a>
+
+    </header>
+
+
+    <!-- Heading -->
+
+    <section class="heading">
+
+        <h1>
+            Predict the <span>next score.</span>
+        </h1>
+
+        <p>
+            Enter the student's academic and demographic information
+            below. The trained machine learning model will estimate
+            their mathematics performance.
+        </p>
+
+    </section>
+
+
+    <!-- Workspace -->
+
+    <section class="workspace">
+
+        <!-- Prediction Form -->
+
+        <div class="card" id="formCard">
+
+            <div class="card-header">
+
+                <div>
+                    <div class="card-title">
+                        Student details
+                    </div>
+
+                    <div class="card-subtitle">
+                        Provide the inputs used by the prediction model.
+                    </div>
+                </div>
+
+                <div class="status">
+                    <span class="status-dot"></span>
+                </div>
+
             </div>
-            <div class="mb-3">
-                <label class="form-label">Race or Ethnicity</label>
-                <select class="form-control" name="ethnicity" placeholder="Enter you ethnicity" required>
-                    <option class="placeholder" selected disabled value="">Select Ethnicity</option>
-                    <option value="group A">
-                        Group A
-                    </option>
-                    <option value="group B">
-                        Group B
-                    </option>
-                    <option value="group C">
-                        Group C
-                    </option>
-                    <option value="group D">
-                        Group D
-                    </option>
-                    <option value="group E">
-                        Group E
-                    </option>
-                </select>
+
+
+            <form
+                    action="{{ url_for('predict') }}"
+                    method="post"
+                    id="predictionForm"
+                    novalidate
+            >
+
+                <div class="form-grid">
+
+                    <!-- Gender -->
+
+                    <div class="field">
+
+                        <label for="gender">
+                            Gender
+                        </label>
+
+                        <div class="input-wrap">
+
+                                <span class="input-icon" aria-hidden="true">
+                                    ◉
+                                </span>
+
+                            <select
+                                    id="gender"
+                                    name="gender"
+                                    required
+                            >
+                                <option value="" selected disabled>
+                                    Select gender
+                                </option>
+
+                                <option value="male">
+                                    Male
+                                </option>
+
+                                <option value="female">
+                                    Female
+                                </option>
+                            </select>
+
+                            <span class="select-arrow">
+                                    ⌄
+                                </span>
+
+                        </div>
+
+                        <small class="validation-message"></small>
+
+                    </div>
+
+
+                    <!-- Race / Ethnicity -->
+
+                    <div class="field">
+
+                        <label for="ethnicity">
+                            Race / Ethnicity
+                        </label>
+
+                        <div class="input-wrap">
+
+                                <span class="input-icon" aria-hidden="true">
+                                    ◈
+                                </span>
+
+                            <select
+                                    id="ethnicity"
+                                    name="ethnicity"
+                                    required
+                            >
+                                <option value="" selected disabled>
+                                    Select group
+                                </option>
+
+                                <option value="group A">
+                                    Group A
+                                </option>
+
+                                <option value="group B">
+                                    Group B
+                                </option>
+
+                                <option value="group C">
+                                    Group C
+                                </option>
+
+                                <option value="group D">
+                                    Group D
+                                </option>
+
+                                <option value="group E">
+                                    Group E
+                                </option>
+                            </select>
+
+                            <span class="select-arrow">
+                                    ⌄
+                                </span>
+
+                        </div>
+
+                        <small class="validation-message"></small>
+
+                    </div>
+
+
+                    <!-- Parental Education -->
+
+                    <div class="field full">
+
+                        <label for="parental_level_of_education">
+                            Parental level of education
+                        </label>
+
+                        <div class="input-wrap">
+
+                                <span class="input-icon" aria-hidden="true">
+                                    ✦
+                                </span>
+
+                            <select
+                                    id="parental_level_of_education"
+                                    name="parental_level_of_education"
+                                    required
+                            >
+                                <option value="" selected disabled>
+                                    Select education level
+                                </option>
+
+                                <option value="some high school">
+                                    Some high school
+                                </option>
+
+                                <option value="high school">
+                                    High school
+                                </option>
+
+                                <option value="some college">
+                                    Some college
+                                </option>
+
+                                <option value="associate's degree">
+                                    Associate's degree
+                                </option>
+
+                                <option value="bachelor's degree">
+                                    Bachelor's degree
+                                </option>
+
+                                <option value="master's degree">
+                                    Master's degree
+                                </option>
+                            </select>
+
+                            <span class="select-arrow">
+                                    ⌄
+                                </span>
+
+                        </div>
+
+                        <small class="validation-message"></small>
+
+                    </div>
+
+
+                    <!-- Lunch -->
+
+                    <div class="field">
+
+                        <label for="lunch">
+                            Lunch type
+                        </label>
+
+                        <div class="input-wrap">
+
+                                <span class="input-icon" aria-hidden="true">
+                                    ◇
+                                </span>
+
+                            <select
+                                    id="lunch"
+                                    name="lunch"
+                                    required
+                            >
+                                <option value="" selected disabled>
+                                    Select lunch type
+                                </option>
+
+                                <option value="standard">
+                                    Standard
+                                </option>
+
+                                <option value="free/reduced">
+                                    Free / Reduced
+                                </option>
+                            </select>
+
+                            <span class="select-arrow">
+                                    ⌄
+                                </span>
+
+                        </div>
+
+                        <small class="validation-message"></small>
+
+                    </div>
+
+
+                    <!-- Test Preparation -->
+
+                    <div class="field">
+
+                        <label for="test_preparation_course">
+                            Test preparation
+                        </label>
+
+                        <div class="input-wrap">
+
+                                <span
+                                        class="input-icon icon-svg"
+                                        aria-hidden="true"
+                                >
+                                    <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                                d="M5 12.5L9.5 17L19 7.5"
+                                                stroke="currentColor"
+                                                stroke-width="2.2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                        />
+                                    </svg>
+                                </span>
+
+                            <select
+                                    id="test_preparation_course"
+                                    name="test_preparation_course"
+                                    required
+                            >
+                                <option value="" selected disabled>
+                                    Select preparation
+                                </option>
+
+                                <option value="none">
+                                    None
+                                </option>
+
+                                <option value="completed">
+                                    Completed
+                                </option>
+                            </select>
+
+                            <span class="select-arrow">
+                                    ⌄
+                                </span>
+
+                        </div>
+
+                        <small class="validation-message"></small>
+
+                    </div>
+
+
+                    <!-- Reading Score -->
+
+                    <div class="field">
+
+                        <label for="reading_score">
+                            Reading score
+                        </label>
+
+                        <div class="input-wrap">
+
+                                <span class="input-icon" aria-hidden="true">
+                                    ◎
+                                </span>
+
+                            <input
+                                    type="number"
+                                    id="reading_score"
+                                    name="reading_score"
+                                    min="0"
+                                    max="100"
+                                    placeholder="0 – 100"
+                                    required
+                            >
+
+                        </div>
+
+                        <small class="validation-message"></small>
+
+                    </div>
+
+
+                    <!-- Writing Score -->
+
+                    <div class="field">
+
+                        <label for="writing_score">
+                            Writing score
+                        </label>
+
+                        <div class="input-wrap">
+
+                                <span class="input-icon" aria-hidden="true">
+                                    ◎
+                                </span>
+
+                            <input
+                                    type="number"
+                                    id="writing_score"
+                                    name="writing_score"
+                                    min="0"
+                                    max="100"
+                                    placeholder="0 – 100"
+                                    required
+                            >
+
+                        </div>
+
+                        <small class="validation-message"></small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Form Footer -->
+
+                <div class="form-footer">
+
+                    <div class="form-note">
+                        Your inputs are processed locally by the
+                        prediction pipeline.
+                    </div>
+
+                    <button
+                            type="submit"
+                            class="predict-button"
+                            id="predictButton"
+                    >
+                            <span class="button-text">
+                                Predict score&nbsp; →
+                            </span>
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- Prediction Result -->
+
+            {% if results is defined and results is not none %}
+
+            <section class="result" id="predictionResult">
+
+                <div class="result-top">
+
+                    <div>
+                        <div class="result-label">
+                            Prediction complete
+                        </div>
+
+                        <div class="result-description">
+                            Estimated mathematics score
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="result-score">
+                    {{ results }}
+                    <small>/ 100</small>
+                </div>
+
+            </section>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Sidebar -->
+
+        <aside class="side-column">
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    About the model
+                </div>
+
+                <h3>
+                    From student inputs to a predicted score.
+                </h3>
+
+                <p>
+                    The prediction pipeline transforms the submitted
+                    student information, applies the trained
+                    preprocessing workflow, and passes the result
+                    through the machine learning model.
+                </p>
+
             </div>
-            <div class="mb-3">
-                <label class="form-label">Parental Level of Education</label>
-                <select class="form-control" name="parental_level_of_education"
-                        placeholder="Enter you Parent Education" required>
-                    <option class="placeholder" selected disabled value="">Select Parent Education</option>
-                    <option value="associate's degree">
-                        associate's degree
-                    </option>
-                    <option value="bachelor's degree">
-                        bachelor's degree
-                    </option>
-                    <option value="high school">
-                        high school
-                    </option>
-                    <option value="master's degree">
-                        master's degree
-                    </option>
-                    <option value="some college">
-                        some college
-                    </option>
-                    <option value="some high school">
-                        some high school
-                    </option>
-                </select>
+
+
+            <div class="info-card">
+
+                <div class="info-label">
+                    Pipeline
+                </div>
+
+                <div class="pipeline">
+
+                    <div class="pipeline-step active">
+                            <span class="step-number">
+                                01
+                            </span>
+                        Student inputs
+                    </div>
+
+                    <div class="pipeline-step">
+                            <span class="step-number">
+                                02
+                            </span>
+                        Preprocessing
+                    </div>
+
+                    <div class="pipeline-step">
+                            <span class="step-number">
+                                03
+                            </span>
+                        ML prediction
+                    </div>
+
+                    <div class="pipeline-step">
+                            <span class="step-number">
+                                04
+                            </span>
+                        Estimated score
+                    </div>
+
+                </div>
+
             </div>
-            <div class="mb-3">
-                <label class="form-label">Lunch Type</label>
-                <select class="form-control" name="lunch" placeholder="Enter you Lunch" required>
-                    <option class="placeholder" selected disabled value="">Select Lunch Type</option>
-                    <option value="free/reduced">
-                        free/reduced
-                    </option>
-                    <option value="standard">
-                        standard
-                    </option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Test preparation Course</label>
-                <select class="form-control" name="test_preparation_course" placeholder="Enter you Course"
-                        required>
-                    <option class="placeholder" selected disabled value="">Select Test_course</option>
-                    <option value="none">
-                        None
-                    </option>
-                    <option value="completed">
-                        Completed
-                    </option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Writing Score out of 100</label>
-                <input class="form-control" type="number" name="reading_score"
-                       placeholder="Enter your Reading score" min='0' max='100'/>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Reading Score out of 100</label>
-                <input class="form-control" type="number" name="writing_score"
-                       placeholder="Enter your Reading Score" min='0' max='100'/>
-            </div>
-            <div class="mb-3">
-                <input class="btn btn-primary" type="submit" value="Predict your Maths Score" required/>
-            </div>
-        </form>
-        <h2>
-            THE prediction is {{results}}
-        </h2>
-    </body>
+
+        </aside>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    const form = document.getElementById("predictionForm");
+    const button = document.getElementById("predictButton");
+    const formCard = document.getElementById("formCard");
+
+    const requiredFields = [
+        ...form.querySelectorAll(
+            "select[required], input[required]"
+        )
+    ];
+
+
+    /*
+     * Generate a friendly label for each field.
+     */
+
+    function getFieldLabel(field) {
+
+        const label = form.querySelector(
+            `label[for="${field.id}"]`
+        );
+
+        return label
+            ? label.textContent.trim().toLowerCase()
+            : "this field";
+    }
+
+
+    /*
+     * Show custom validation message.
+     */
+
+    function showError(field, message) {
+
+        const wrapper = field.closest(".field");
+
+        if (!wrapper) return;
+
+        wrapper.classList.add("invalid");
+
+        const messageElement =
+            wrapper.querySelector(".validation-message");
+
+        if (messageElement) {
+            messageElement.textContent = message;
+        }
+    }
+
+
+    /*
+     * Remove custom validation message.
+     */
+
+    function clearError(field) {
+
+        const wrapper = field.closest(".field");
+
+        if (!wrapper) return;
+
+        wrapper.classList.remove("invalid");
+
+        const messageElement =
+            wrapper.querySelector(".validation-message");
+
+        if (messageElement) {
+            messageElement.textContent = "";
+        }
+    }
+
+
+    /*
+     * Validate an individual field.
+     */
+
+    function validateField(field) {
+
+        const label = getFieldLabel(field);
+
+
+        /*
+         * Empty field
+         */
+
+        if (!field.value.trim()) {
+
+            if (field.tagName === "SELECT") {
+
+                showError(
+                    field,
+                    `Please select ${label}.`
+                );
+
+            } else {
+
+                showError(
+                    field,
+                    `Please enter ${label}.`
+                );
+            }
+
+            return false;
+        }
+
+
+        /*
+         * Score range validation
+         */
+
+        if (
+            field.type === "number" &&
+            (
+                Number(field.value) < 0 ||
+                Number(field.value) > 100
+            )
+        ) {
+
+            showError(
+                field,
+                "Enter a score between 0 and 100."
+            );
+
+            return false;
+        }
+
+
+        clearError(field);
+
+        return true;
+    }
+
+
+    /*
+     * Validate while the user interacts with the form.
+     */
+
+    requiredFields.forEach(field => {
+
+        const eventName =
+            field.tagName === "SELECT"
+                ? "change"
+                : "input";
+
+        field.addEventListener(eventName, () => {
+
+            if (field.value.trim()) {
+
+                validateField(field);
+
+            } else {
+
+                clearError(field);
+
+            }
+
+        });
+
+    });
+
+
+    /*
+     * Form submission
+     */
+
+    form.addEventListener("submit", function (event) {
+
+        const invalidFields = [];
+
+        requiredFields.forEach(field => {
+
+            const valid = validateField(field);
+
+            if (!valid) {
+                invalidFields.push(field);
+            }
+
+        });
+
+
+        /*
+         * Stop submission if anything is missing/invalid.
+         */
+
+        if (invalidFields.length > 0) {
+
+            event.preventDefault();
+
+            const firstInvalid = invalidFields[0];
+
+            firstInvalid.focus();
+
+
+            /*
+             * Small visual feedback on the form.
+             */
+
+            formCard.classList.remove("shake");
+
+            void formCard.offsetWidth;
+
+            formCard.classList.add("shake");
+
+            return;
+        }
+
+
+        /*
+         * Everything is valid.
+         * Show loading state while Flask processes prediction.
+         */
+
+        button.classList.add("loading");
+
+    });
+
+
+    /*
+     * Scroll to prediction result.
+     *
+     * The result element only exists when Flask has
+     * returned a prediction, so no Jinja is needed here.
+     */
+
+    const predictionResult =
+        document.getElementById("predictionResult");
+
+    if (predictionResult) {
+
+        setTimeout(() => {
+
+            predictionResult.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+        }, 200);
+
+    }
+
+    /*
+     * Custom select dropdowns
+     */
+    document.querySelectorAll(".input-wrap select").forEach(select => {
+        const wrap = select.closest(".input-wrap");
+        const field = select.closest(".field");
+
+        const custom = document.createElement("div");
+        custom.className = "custom-select";
+
+        const trigger = document.createElement("button");
+        trigger.type = "button";
+        trigger.className = "custom-select-trigger";
+        trigger.setAttribute("aria-haspopup", "listbox");
+        trigger.setAttribute("aria-expanded", "false");
+
+        const menu = document.createElement("div");
+        menu.className = "custom-select-menu";
+        menu.setAttribute("role", "listbox");
+
+        const options = Array.from(select.options);
+
+        function updateCustomSelect() {
+            const selected = select.options[select.selectedIndex];
+            trigger.textContent = selected ? selected.textContent.trim() : "";
+            custom.classList.toggle("has-value", !!select.value);
+
+            menu.querySelectorAll(".custom-select-option").forEach(option => {
+                option.classList.toggle(
+                    "selected",
+                    option.dataset.value === select.value
+                );
+            });
+        }
+
+        options.forEach(option => {
+            if (option.disabled) return;
+
+            const item = document.createElement("div");
+            item.className = "custom-select-option";
+            item.textContent = option.textContent.trim();
+            item.dataset.value = option.value;
+            item.setAttribute("role", "option");
+
+            item.addEventListener("click", () => {
+                select.value = option.value;
+                select.dispatchEvent(new Event("change", {bubbles: true}));
+                updateCustomSelect();
+                custom.classList.remove("open");
+                trigger.setAttribute("aria-expanded", "false");
+            });
+
+            menu.appendChild(item);
+        });
+
+        trigger.addEventListener("click", event => {
+            event.stopPropagation();
+
+            document.querySelectorAll(".custom-select.open").forEach(openSelect => {
+                if (openSelect !== custom) {
+                    openSelect.classList.remove("open");
+                    openSelect.querySelector(".custom-select-trigger")
+                        .setAttribute("aria-expanded", "false");
+                }
+            });
+
+            const isOpen = custom.classList.toggle("open");
+            trigger.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        custom.appendChild(trigger);
+        custom.appendChild(menu);
+
+        select.parentNode.insertBefore(custom, select);
+        custom.appendChild(select);
+
+        updateCustomSelect();
+    });
+
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".custom-select.open").forEach(custom => {
+            custom.classList.remove("open");
+            custom.querySelector(".custom-select-trigger")
+                .setAttribute("aria-expanded", "false");
+        });
+    });
+
+    if (predictionResult) {
+        setTimeout(() => {
+            predictionResult.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }, 200);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Target all links that act as route changes
+        const routeLinks = document.querySelectorAll('a.cta, a.brand, a.back');
+
+        routeLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Prevent the instant jump
+                e.preventDefault();
+
+                const targetUrl = link.href;
+
+                // Trigger the exit animation
+                document.body.classList.add('fade-out');
+
+                // Wait for the animation to finish (300ms), then navigate
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 300);
+            });
+        });
+    });
+</script>
+
+</body>
 </html>
