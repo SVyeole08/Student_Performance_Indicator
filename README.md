@@ -4,7 +4,7 @@ Student Performance Indicator is an end-to-end machine learning web application 
 from demographic, academic, and test preparation attributes. The project covers data ingestion, preprocessing, model
 evaluation, hyperparameter tuning, and production inference through a Flask backend.
 
-🔗 [**Live Application**](YOUR_DEPLOYED_URL)
+🔗 [**Live Application**](https://student-performance-indicator-3a1l.onrender.com/)
 
 ---
 
@@ -41,7 +41,7 @@ The model predicts **Math Score** based on 7 input features:
 ### Performance
 
 * **Target:** Math Score
-* **Evaluation Metric:** R² Score : 0.8805931485028737
+* **Evaluation Metric:** R² Score : 0.8805931485028737 (Ridge Regression)
 * **Models Evaluated:** Linear Regression, Ridge, Lasso, KNN, SVR, Decision Tree, Random Forest, AdaBoost, Gradient
   Boosting, XGBoost, CatBoost
 
