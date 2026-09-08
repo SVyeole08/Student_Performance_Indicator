@@ -24,7 +24,7 @@ Rendered Math Score Prediction
 
 ---
 
-## 📊 Features & Model Details
+## Features & Model Details
 
 The model predicts **Math Score** based on 7 input features:
 
@@ -47,11 +47,17 @@ The model predicts **Math Score** based on 7 input features:
 
 ---
 
-## 📁 Repository Structure
+## 📁 Project Structure
 
 ```text
 Student_Performance_Indicator/
 ├── app.py                         # Flask backend & prediction routes
+├── artifact/                      # Artifacts
+│   ├── data.csv
+│   ├── model.pkl
+│   ├── preprocessor.pkl
+│   ├── test.csv
+│   └── train.csv
 ├── src/
 │   ├── components/
 │   │   ├── data_ingestion.py      # Data ingestion & train/test split
@@ -109,7 +115,7 @@ Open `http://127.0.0.1:5000` in your browser.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 * **Core Language:** Python
 * **Data Science & ML:** Scikit-learn, Pandas, NumPy, XGBoost, CatBoost, Matplotlib, Seaborn
