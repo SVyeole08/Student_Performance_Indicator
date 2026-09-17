@@ -124,8 +124,7 @@ class ModelTrainer:
             logging.info("Taken best model.")
 
             if best_model_score < 0.60:
-                raise CustomException("No best model found.")
-            logging.info("Found best model on both training and testing dataset.")
+                raise CustomException("No best model found. Not a single model crossed r2 of 0.60", sys)
 
             save_obj(self.modelTrainerConfig.train_model_file_path, obj=best_model)
             logging.info("Saved the model.")
@@ -133,8 +132,8 @@ class ModelTrainer:
             prediction = best_model.predict(X_test)
             score_r2 = r2_score(y_test, prediction)
 
-            return score_r2
             logging.info("Printed best score.")
+            return score_r2
 
         except Exception as e:
             raise CustomException(e, sys)
