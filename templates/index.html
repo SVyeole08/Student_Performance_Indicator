@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#03045e">
     <meta name="description"
           content="Student Performance Indicator — an ML-powered mathematics score prediction experience.">
-    <title>Student Performance Indicator | ML Prediction</title>
+    <title>Student Performance Indicator</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -22,12 +22,15 @@
             --shadow: 0 12px 35px rgba(3, 4, 94, 0.6);
         }
 
-        * {
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
+        img, svg {
+            max-width: 100%;
+            height: auto;
         }
 
         body {
@@ -38,6 +41,7 @@
             background: var(--bg);
             font-family: "DM Sans", sans-serif;
             overflow-x: hidden;
+            width: 100%;
         }
 
         body.fade-out {
@@ -133,13 +137,34 @@
             font-weight: 700;
         }
 
+        /* --- Social Links CSS --- */
+        .social-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .social-links a {
+            color: var(--muted);
+            display: grid;
+            place-items: center;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+        /* ------------------------ */
+
         main {
             position: relative;
             z-index: 2;
         }
 
         .hero {
-            min-height: calc(100vh - 82px);
+            /* Sets height to 80% of the viewport, leaving the bottom 20% for the feature cards to peek through */
+            min-height: 80vh;
             width: auto;
             max-width: 1180px;
             margin: 0 6vw 0 6vw;
@@ -147,7 +172,7 @@
             grid-template-columns: 1.08fr 0.92fr;
             gap: 70px;
             align-items: center;
-            padding: 52px 0 100px;
+            padding: 52px 0 60px;
         }
 
         h1 {
@@ -206,7 +231,6 @@
         .cta:hover {
             transform: translate(-4px, -4px);
             box-shadow: 8px 8px 0px var(--line-hover);
-            /* Removed the white background and added a dimming filter */
             filter: brightness(0.85);
         }
 
@@ -232,7 +256,7 @@
 
         .visual {
             position: relative;
-            min-height: 520px;
+            min-height: 480px;
             display: grid;
             place-items: center;
             animation: rise 0.9s 0.12s both;
@@ -245,7 +269,6 @@
             border-radius: 16px;
             border: 2px solid var(--line);
             background: var(--panel);
-            /* Slide in and settle into the original 3D tilt */
             animation: slideInDashboard 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
@@ -257,7 +280,6 @@
             }
             100% {
                 opacity: 1;
-                /* Restores your original 3D orientation and stays perfectly still */
                 transform: translateX(0) rotateY(-8deg) rotateX(5deg);
                 box-shadow: 8px 8px 0 var(--line);
             }
@@ -370,6 +392,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 14px;
+            animation: rise 0.8s 0.32s both;
         }
 
         .feature {
@@ -435,6 +458,8 @@
                 grid-template-columns: 1fr;
                 gap: 35px;
                 padding-top: 10px;
+                min-height: auto;
+                margin-bottom: 40px;
             }
 
             .visual {
@@ -452,9 +477,12 @@
 
         @media (max-width: 520px) {
             nav, .hero, .features, footer {
-                margin-left: 20px;
-                margin-right: 20px;
+                margin-left: 5vw;
+                margin-right: 5vw;
             }
+
+            .social-links { gap: 12px; }
+            .social-links svg { width: 18px; height: 18px; }
 
             .lead {
                 font-size: 16px;
@@ -470,7 +498,13 @@
             }
 
             .dashboard {
-                width: 94vw;
+                width: 100%;
+                transform: translateX(0) rotateY(0) rotateX(0);
+            }
+
+            @keyframes slideInDashboard {
+                0% { opacity: 0; transform: translateY(20px); box-shadow: 0 0 0 transparent; }
+                100% { opacity: 1; transform: translateY(0); box-shadow: 4px 4px 0 var(--line); }
             }
 
             footer {
@@ -511,14 +545,34 @@
 <nav>
     <a class="brand" href="{{ url_for('index') }}">
         <span class="brand-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                <polyline points="16 7 22 7 22 13"></polyline>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
             </svg>
         </span>
         <span>Student Performance</span>
     </a>
+
+    <div class="social-links">
+        <a href="https://github.com/SVyeole08" target="_blank" aria-label="GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+        </a>
+        <a href="https://linkedin.com/in/sarvadnyayeole" target="_blank" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+        </a>
+        <a href="https://x.com/SV_yeole_022" target="_blank" aria-label="X (Twitter)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+            </svg>
+        </a>
+    </div>
 </nav>
 
 <main>
@@ -659,6 +713,26 @@
             });
         });
     });
+</script>
+<!-- Lenis Smooth Scrolling -->
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+    });
+
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
 </script>
 </body>
 </html>
