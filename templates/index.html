@@ -35,7 +35,7 @@
 
         body {
             opacity: 0;
-            animation: fadeInPage 0.5s ease-out forwards;
+            animation: skewInPage 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             margin: 0;
             color: var(--text);
             background: var(--bg);
@@ -45,28 +45,28 @@
         }
 
         body.fade-out {
-            animation: fadeOutPage 0.3s ease-in forwards;
+            animation: skewOutPage 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes fadeInPage {
-            from {
+        @keyframes skewInPage {
+            0% {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(80px) skewY(2deg);
             }
-            to {
+            100% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) skewY(0deg);
             }
         }
 
-        @keyframes fadeOutPage {
-            from {
+        @keyframes skewOutPage {
+            0% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) skewY(0deg);
             }
-            to {
+            100% {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-80px) skewY(-2deg);
             }
         }
 
@@ -709,7 +709,7 @@
                 document.body.classList.add('fade-out');
                 setTimeout(() => {
                     window.location.href = targetUrl;
-                }, 300);
+                }, 450);
             });
         });
     });
